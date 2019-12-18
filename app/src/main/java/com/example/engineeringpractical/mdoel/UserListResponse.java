@@ -35,6 +35,16 @@ public class UserListResponse {
         @SerializedName("created_at")
         String created_at;
 
+        Boolean isSelected = false;
+
+        public Boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(Boolean selected) {
+            isSelected = selected;
+        }
+
         public String getTitle() {
             return title;
         }

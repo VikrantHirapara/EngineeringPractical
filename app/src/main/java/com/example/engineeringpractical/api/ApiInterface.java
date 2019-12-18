@@ -8,5 +8,5 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
     @GET("search_by_date")
-    Call<UserListResponse> getUsersList(@Query("tags") String tags, @Query("page") String page);
+    Call<UserListResponse> getUsersList(@Query("tags") String tags, @Query("page") int page);
 }
