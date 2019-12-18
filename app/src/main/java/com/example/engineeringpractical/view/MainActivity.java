@@ -19,7 +19,6 @@ import com.example.engineeringpractical.api.ApiInterface;
 import com.example.engineeringpractical.mdoel.UserListResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -49,12 +48,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     Context ctx = this;
 
     ItemAdapter adapter;
-    List<UserListResponse.UserHits> hitsList;
-
-    private int currentPage = 1;
-    private boolean isLastPage = false;
     private int totalPage = 10;
-    private boolean isLoading = false;
     int itemCount = 0;
     static int selectCount = 0;
     TextView notifyCount;
@@ -80,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onLoadMore(int current_page) {
                 progressBottom.setVisibility(View.VISIBLE);
-                currentPage++;
                 apiCall(current_page);
             }
         };
@@ -121,8 +114,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setNotifCount(0);
         endlessRecyclerOnScrollListener.reset();
         itemCount = 0;
-        currentPage = 1;
-        isLastPage = false;
         adapter.clear();
 
         apiCall(1);
