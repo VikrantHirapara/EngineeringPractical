@@ -21,11 +21,6 @@ import butterknife.ButterKnife;
 
 public class ItemAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private static final int VIEW_TYPE_LOADING = 0;
-    private static final int VIEW_TYPE_NORMAL = 1;
-    private boolean isLoaderVisible = false;
-
-
     List<UserListResponse.UserHits> hitsList;
     Context ctx;
 
@@ -37,24 +32,8 @@ public class ItemAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case VIEW_TYPE_LOADING:
-                return new ProgressHolder(LayoutInflater.from(ctx).inflate(R.layout.item_loading, parent, false));
-            case VIEW_TYPE_NORMAL:
-                return new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_main, parent, false));
-            default:
-                return null;
-        }
-    }
 
-
-    @Override
-    public int getItemViewType(int position) {
-        if (isLoaderVisible) {
-            return position == hitsList.size() - 1 ? VIEW_TYPE_LOADING : VIEW_TYPE_NORMAL;
-        } else {
-            return VIEW_TYPE_NORMAL;
-        }
+        return new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_main, parent, false));
     }
 
     @Override
@@ -102,52 +81,14 @@ public class ItemAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
-    public List<UserListResponse.UserHits> getItems() {
-        return hitsList;
-    }
-
-    public class ProgressHolder extends BaseViewHolder {
-        ProgressHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        @Override
-        protected void clear() {
-        }
-    }
-
     public void addItems(List<UserListResponse.UserHits> postItems) {
         hitsList.addAll(postItems);
         notifyDataSetChanged();
     }
 
-    public void addLoading() {
-        isLoaderVisible = true;
-        hitsList.add(new UserListResponse.UserHits());
-        if (hitsList.size() != 0)
-            notifyItemInserted(hitsList.size() - 1);
-    }
-
-    public void removeLoading() {
-        isLoaderVisible = false;
-        int position = hitsList.size() - 1;
-        UserListResponse.UserHits item = getItem(position);
-        if (item != null) {
-            if (hitsList.size() != 0) {
-                hitsList.remove(position);
-                notifyItemRemoved(position);
-            }
-        }
-    }
 
     public void clear() {
         hitsList.clear();
         notifyDataSetChanged();
     }
-
-    UserListResponse.UserHits getItem(int position) {
-        return hitsList.get(position);
-    }
-
 }

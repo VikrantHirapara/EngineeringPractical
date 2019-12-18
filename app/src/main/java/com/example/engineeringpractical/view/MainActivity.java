@@ -1,6 +1,7 @@
 package com.example.engineeringpractical.view;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -123,40 +124,53 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         currentPage = 1;
         isLastPage = false;
         adapter.clear();
+
         apiCall(1);
     }
 
     private void apiCall(int page) {
-        ApiInterface service = APIClient.getRetrofitInstance().create(ApiInterface.class);
 
-        Call<UserListResponse> call = service.getUsersList("story", page);
+        if (isNetworkAvailable(ctx)) {
+            ApiInterface service = APIClient.getRetrofitInstance().create(ApiInterface.class);
 
-        call.enqueue(new Callback<UserListResponse>() {
-            @Override
-            public void onResponse(Call<UserListResponse> call, Response<UserListResponse> response) {
-                //adapter.removeLoading();
-                progress.setVisibility(View.GONE);
-                progressBottom.setVisibility(View.GONE);
-                swipeRefresh.setRefreshing(false);
-                if (response.body() != null) {
+            Call<UserListResponse> call = service.getUsersList("story", page);
 
-                    totalPage = response.body().getNbPages();
-                    adapter.addItems(response.body().getHits());
-                    setNotifCount(adapter.getItemCount());
+            call.enqueue(new Callback<UserListResponse>() {
+                @Override
+                public void onResponse(Call<UserListResponse> call, Response<UserListResponse> response) {
+                    //adapter.removeLoading();
+                    progress.setVisibility(View.GONE);
+                    progressBottom.setVisibility(View.GONE);
+                    swipeRefresh.setRefreshing(false);
+                    if (response.body() != null) {
+
+                        totalPage = response.body().getNbPages();
+                        adapter.addItems(response.body().getHits());
+                        setNotifCount(adapter.getItemCount());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<UserListResponse> call, Throwable t) {
-                adapter.removeLoading();
-                Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<UserListResponse> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            progress.setVisibility(View.GONE);
+            progressBottom.setVisibility(View.GONE);
+            Toast.makeText(ctx, "Internet Not available", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setNotifCount(int count) {
         selectCount = count;
         invalidateOptionsMenu();
+    }
+
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
 
