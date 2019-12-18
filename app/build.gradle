@@ -28,14 +28,17 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 
-    implementation 'com.android.support:design:29.0.2'
-    //Glide
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
-    //circle imageView
-    implementation 'de.hdodenhof:circleimageview:3.0.1'
-
+    // retrofit, gson
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    // GSON body parser
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.2'
     // code generator for view
     implementation "com.jakewharton:butterknife:10.1.0"
     annotationProcessor "com.jakewharton:butterknife-compiler:10.1.0"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+
 }

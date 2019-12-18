@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBlack">#000000</color>
-    <color name="thumb_border">#808080</color>
+    <color name="colorDark">#808080</color>
 </resources>
